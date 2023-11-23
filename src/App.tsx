@@ -1,17 +1,22 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import {default as A} from "@automerge/automerge/next"
-import {AutomergeUrl} from '@automerge/automerge-repo'
-import {useDocument} from '@automerge/automerge-repo-react-hooks'
+import { AutomergeUrl } from "@automerge/automerge-repo";
+import { useDocument } from "@automerge/automerge-repo-react-hooks";
+import * as A from "@automerge/automerge/next";
+
+import "./App.css";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
 
 interface CounterDoc {
-    counter: A.Counter
+  counter: A.Counter;
 }
 
-function App({docUrl}: {docUrl: AutomergeUrl}) {
-  const [doc, changeDoc] = useDocument<CounterDoc>(docUrl) 
+function App({ docUrl }: { docUrl: AutomergeUrl }) {
+  const [doc, changeDoc] = useDocument<CounterDoc>(docUrl);
 
+  doc &&
+    A.getHistory(doc).forEach((state) => {
+      console.log(state.snapshot.counter && state.snapshot.counter.value);
+    });
   return (
     <>
       <div>
@@ -25,7 +30,7 @@ function App({docUrl}: {docUrl: AutomergeUrl}) {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => changeDoc((d) => d.counter.increment(1))}>
-          count is { doc && doc.counter.value }
+          count is {doc && doc.counter.value}
         </button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
@@ -35,7 +40,7 @@ function App({docUrl}: {docUrl: AutomergeUrl}) {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
